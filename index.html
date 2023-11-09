@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Playlist Gallery</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .videos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-gap: 15px;
+            margin-top: 50px;
+        }
+
+        .video-item {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .video-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: 0.5s;
+        }
+
+        .video-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .play-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
+            opacity: 0;
+            transition: 0.5s;
+        }
+
+        .video-item:hover .play-btn {
+            opacity: 1;
+        }
+
+        .play-btn::before {
+            content: "";
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 10px 0 10px 20px;
+            border-color: transparent transparent transparent #fff;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.5s;
+        }
+
+        .modal video {
+            width: 80%;
+            height: 80%;
+        }
+
+        .modal.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
+            cursor: pointer;
+        }
+
+        .close-btn::before,
+        .close-btn::after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background-color: #fff;
+            border-radius: 5px;
+        }
+
+        .close-btn::before {
+            transform: rotate(45deg);
+        }
+
+        .close-btn::after {
+            transform: rotate(-45deg);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="videos">
+            <!-- video item -->
+            <div class="video-item" data-video="https://www.w3schools.com/html/mov_bbb.mp4">
+                <img src="https://www.w3schools.com/html/mov_bbb.gif" alt="">
+                <div class="play-btn"></div>
+            </div>
+            <!-- video item -->
+            <div class="video-item" data-video="https://www.w3schools.com/html/movie.mp4">
+                <img src="https://www.w3schools.com/html/movie.jpg" alt="">
+                <div class="play-btn"></div>
+            </div>
+            <!-- more video items -->
+        </div>
+    </div>
+
+    <div class="modal">
+        <video controls>
+            <source src="" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="close-btn"></div>
+    </div>
+
+    <script>
+        const videoItems = document.querySelectorAll('.video-item');
+        const modal = document.querySelector('.modal');
+        const modalVideo = modal.querySelector('video');
+        const closeBtn = modal.querySelector('.close-btn');
+
+        videoItems.forEach(item => {
+            item.addEventListener('click', () => {
+                modalVideo.src = item.getAttribute('data-video');
+                modal.classList.add('open');
+            });
+        });
+
+        closeBtn.addEventListener('click', () => {
+            modal.classList.remove('open');
+            modalVideo.src = '';
+        });
+    </script>
+</body>
+</html>
